@@ -1,23 +1,23 @@
-import * as fromPizzas from './movies.reducer';
+import * as fromMovies from './movies.reducer';
 import * as fromActions from '../actions/movies.action';
-import { Pizza } from '../../models/pizza.model';
+import { IMovie } from '../../models/movies.model';
 
-describe('PizzasReducer', () => {
+describe('MoviesReducer', () => {
   describe('undefined action', () => {
     it('should return the default state', () => {
-      const { initialState } = fromPizzas;
+      const { initialState } = fromMovies;
       const action = {} as any;
-      const state = fromPizzas.reducer(undefined, action);
+      const state = fromMovies.reducer(undefined, action);
 
       expect(state).toBe(initialState);
     });
   });
 
-  describe('LOAD_PIZZAS action', () => {
+  describe('LOAD_MOVIES action', () => {
     it('should set loading to true', () => {
-      const { initialState } = fromPizzas;
-      const action = new fromActions.LoadPizzas();
-      const state = fromPizzas.reducer(initialState, action);
+      const { initialState } = fromMovies;
+      const action = new fromActions.LoadMovies();
+      const state = fromMovies.reducer(initialState, action);
 
       expect(state.loading).toEqual(true);
       expect(state.loaded).toEqual(false);
@@ -25,19 +25,37 @@ describe('PizzasReducer', () => {
     });
   });
 
-  describe('LOAD_PIZZAS_SUCCESS action', () => {
-    it('should populate the toppings array', () => {
-      const pizzas: Pizza[] = [
-        { id: 1, name: 'Pizza #1', toppings: [] },
-        { id: 2, name: 'Pizza #2', toppings: [] },
+  describe('LOAD_MOVIES_SUCCESS action', () => {
+    it('should create entity', () => {
+      const movies: IMovie[] = [
+        {
+          "id": 1,
+          "key": "we-are-the-millers",
+          "name": "We\"re the Millers",
+          "description": "A veteran pot dealer creates a fake family as part of his plan to move a huge shipment of weed into the U.S. from Mexico.",
+          "genres": ["adventure", "comedy", "crime"],
+          "rate": "7.0",
+          "length": "1hr 50mins",
+          "img": "we-are-the-millers.jpg"
+        },
+        {
+          "id": 2,
+          "key": "straight-outta-compton",
+          "name": "Straight Outta Compton",
+          "description": "The group NWA emerges from the mean streets of Compton in Los Angeles, California, in the mid-1980s and revolutionizes Hip Hop culture with their music and tales about life in the hood.",
+          "genres": ["biography", "drama", "history"],
+          "rate": "8.0",
+          "length": "2hr 27mins",
+          "img": "straight-outta-compton.jpg"
+        },
       ];
       const entities = {
-        1: pizzas[0],
-        2: pizzas[1],
+        1: movies[0],
+        2: movies[1],
       };
-      const { initialState } = fromPizzas;
-      const action = new fromActions.LoadPizzasSuccess(pizzas);
-      const state = fromPizzas.reducer(initialState, action);
+      const { initialState } = fromMovies;
+      const action = new fromActions.LoadMoviesSuccess(movies);
+      const state = fromMovies.reducer(initialState, action);
 
       expect(state.loaded).toEqual(true);
       expect(state.loading).toEqual(false);
@@ -45,126 +63,74 @@ describe('PizzasReducer', () => {
     });
   });
 
-  describe('LOAD_PIZZAS_FAIL action', () => {
+  describe('LOAD_MOVIES_FAIL action', () => {
     it('should return the initial state', () => {
-      const { initialState } = fromPizzas;
-      const action = new fromActions.LoadPizzasFail({});
-      const state = fromPizzas.reducer(initialState, action);
+      const { initialState } = fromMovies;
+      const action = new fromActions.LoadMoviesFail({});
+      const state = fromMovies.reducer(initialState, action);
 
       expect(state).toEqual(initialState);
     });
 
     it('should return the previous state', () => {
-      const { initialState } = fromPizzas;
+      const { initialState } = fromMovies;
       const previousState = { ...initialState, loading: true };
-      const action = new fromActions.LoadPizzasFail({});
-      const state = fromPizzas.reducer(previousState, action);
+      const action = new fromActions.LoadMoviesFail({});
+      const state = fromMovies.reducer(previousState, action);
 
       expect(state).toEqual(initialState);
     });
   });
-
-  describe('CREATE_PIZZA_SUCCESS action', () => {
-    it('should add the new pizza to the pizzas array', () => {
-      const pizzas: Pizza[] = [
-        { id: 1, name: 'Pizza #1', toppings: [] },
-        { id: 2, name: 'Pizza #2', toppings: [] },
-      ];
-      const newPizza: Pizza = {
-        id: 3,
-        name: 'Pizza #3',
-        toppings: [],
-      };
-      const entities = {
-        1: pizzas[0],
-        2: pizzas[1],
-      };
-      const { initialState } = fromPizzas;
-      const previousState = { ...initialState, entities };
-      const action = new fromActions.CreatePizzaSuccess(newPizza);
-      const state = fromPizzas.reducer(previousState, action);
-
-      expect(Object.keys(state.entities).length).toEqual(3);
-      expect(state.entities).toEqual({ ...entities, 3: newPizza });
-    });
-  });
-
-  describe('UPDATE_PIZZA_SUCCESS action', () => {
-    it('should update the pizza', () => {
-      const pizzas: Pizza[] = [
-        { id: 1, name: 'Pizza #1', toppings: [] },
-        { id: 2, name: 'Pizza #2', toppings: [] },
-      ];
-      const updatedPizza = {
-        id: 2,
-        name: 'Pizza #2',
-        toppings: [{ id: 1, name: 'basil' }],
-      };
-      const entities = {
-        1: pizzas[0],
-        2: pizzas[1],
-      };
-      const { initialState } = fromPizzas;
-      const previousState = { ...initialState, entities };
-      const action = new fromActions.UpdatePizzaSuccess(updatedPizza);
-      const state = fromPizzas.reducer(previousState, action);
-
-      expect(Object.keys(state.entities).length).toEqual(2);
-      expect(state.entities).toEqual({ ...entities, 2: updatedPizza });
-    });
-  });
-
-  describe('REMOVE_PIZZA_SUCCESS action', () => {
-    it('should remove the pizza', () => {
-      const pizzas: Pizza[] = [
-        { id: 1, name: 'Pizza #1', toppings: [] },
-        { id: 2, name: 'Pizza #2', toppings: [] },
-      ];
-      const entities = {
-        1: pizzas[0],
-        2: pizzas[1],
-      };
-      const { initialState } = fromPizzas;
-      const previousState = { ...initialState, entities };
-      const action = new fromActions.RemovePizzaSuccess(pizzas[0]);
-      const state = fromPizzas.reducer(previousState, action);
-
-      expect(Object.keys(state.entities).length).toEqual(1);
-      expect(state.entities).toEqual({ 2: pizzas[1] });
-    });
-  });
 });
 
-describe('PizzasReducer Selectors', () => {
-  describe('getPizzaEntities', () => {
+describe('MoviesReducer Selectors', () => {
+  describe('getMoviesEntities', () => {
     it('should return .entities', () => {
-      const entities: { [key: number]: Pizza } = {
-        1: { id: 1, name: 'Pizza #1', toppings: [] },
-        2: { id: 2, name: 'Pizza #2', toppings: [] },
+      const entities: { [key: number]: IMovie } = {
+        1: {
+          "id": 1,
+          "key": "we-are-the-millers",
+          "name": "We\"re the Millers",
+          "description": "A veteran pot dealer creates a fake family as part of his plan to move a huge shipment of weed into the U.S. from Mexico.",
+          "genres": ["adventure", "comedy", "crime"],
+          "rate": "7.0",
+          "length": "1hr 50mins",
+          "img": "we-are-the-millers.jpg"
+        },
+      2: {
+        "id": 2,
+        "key": "straight-outta-compton",
+        "name": "Straight Outta Compton",
+        "description": "The group NWA emerges from the mean streets of Compton in Los Angeles, California, in the mid-1980s and revolutionizes Hip Hop culture with their music and tales about life in the hood.",
+        "genres": ["biography", "drama", "history"],
+        "rate": "8.0",
+        "length": "2hr 27mins",
+        "img": "straight-outta-compton.jpg"
+      },
       };
-      const { initialState } = fromPizzas;
+      const { initialState } = fromMovies;
       const previousState = { ...initialState, entities };
-      const slice = fromPizzas.getPizzasEntities(previousState);
+      const slice = fromMovies.getMoviesEntities(previousState);
 
       expect(slice).toEqual(entities);
     });
   });
 
-  describe('getPizzasLoading', () => {
+  describe('getMoviesLoading', () => {
     it('should return .loading', () => {
-      const { initialState } = fromPizzas;
+      const { initialState } = fromMovies;
       const previousState = { ...initialState, loading: true };
-      const slice = fromPizzas.getPizzasLoading(previousState);
+      const slice = fromMovies.getMoviesLoading(previousState);
 
       expect(slice).toEqual(true);
     });
   });
 
-  describe('getPizzasLoaded', () => {
+  describe('getMoviesLoaded', () => {
     it('should return .loaded', () => {
-      const { initialState } = fromPizzas;
+      const { initialState } = fromMovies;
       const previousState = { ...initialState, loaded: true };
-      const slice = fromPizzas.getPizzasLoaded(previousState);
+      const slice = fromMovies.getMoviesLoaded(previousState);
 
       expect(slice).toEqual(true);
     });

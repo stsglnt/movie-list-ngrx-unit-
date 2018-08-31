@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { FormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -20,6 +20,7 @@ import * as fromGuards from './guards';
 
 // services
 import * as fromServices from './services';
+import {MaterialModule} from '../app/material.module';
 
 // routes
 export const ROUTES: Routes = [
@@ -43,6 +44,8 @@ export const ROUTES: Routes = [
     RouterModule.forChild(ROUTES),
     StoreModule.forFeature('movies', reducers),
     EffectsModule.forFeature(effects),
+    MaterialModule,
+    FormsModule
   ],
   providers: [...fromServices.services, ...fromGuards.guards],
   declarations: [...fromContainers.containers, ...fromComponents.components],

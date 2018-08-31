@@ -1,219 +1,61 @@
-import * as fromPizzas from './movies.action';
+import * as fromMovies from './movies.action';
 
-describe('Pizzas Actions', () => {
-  describe('LoadPizzas Actions', () => {
-    describe('LoadPizzas', () => {
+describe('Movies Actions', () => {
+  describe('LoadMovies Actions', () => {
+    describe('LoadMovies', () => {
       it('should create an action', () => {
-        const action = new fromPizzas.LoadPizzas();
+        const action = new fromMovies.LoadMovies();
 
         expect({ ...action }).toEqual({
-          type: fromPizzas.LOAD_PIZZAS,
+          type: fromMovies.LOAD_MOVIES,
         });
       });
     });
 
-    describe('LoadPizzasFail', () => {
+    describe('LoadMoviesFail', () => {
       it('should create an action', () => {
         const payload = { message: 'Load Error' };
-        const action = new fromPizzas.LoadPizzasFail(payload);
+        const action = new fromMovies.LoadMoviesFail(payload);
 
         expect({ ...action }).toEqual({
-          type: fromPizzas.LOAD_PIZZAS_FAIL,
+          type: fromMovies.LOAD_MOVIES_FAIL,
           payload,
         });
       });
     });
 
-    describe('LoadPizzasSuccess', () => {
+    describe('LoadMoviesSuccess', () => {
       it('should create an action', () => {
         const payload = [
           {
-            id: 1,
-            name: 'Pizza #1',
-            toppings: [
-              { id: 1, name: 'onion' },
-              { id: 2, name: 'mushroom' },
-              { id: 3, name: 'basil' },
-            ],
+            "id": 2,
+            "key": "we-are-the-millers",
+            "name": "We\"re the Millers",
+            "description": "A veteran pot dealer creates a fake family as part of his plan to move a huge shipment of weed into the U.S. from Mexico.",
+            "genres": ["adventure", "comedy", "crime"],
+            "rate": "7.0",
+            "length": "1hr 50mins",
+            "img": "we-are-the-millers.jpg"
           },
           {
-            id: 2,
-            name: 'Pizza #2',
-            toppings: [
-              { id: 1, name: 'onion' },
-              { id: 2, name: 'mushroom' },
-              { id: 3, name: 'basil' },
-            ],
+            "id": 3,
+            "key": "straight-outta-compton",
+            "name": "Straight Outta Compton",
+            "description": "The group NWA emerges from the mean streets of Compton in Los Angeles, California, in the mid-1980s and revolutionizes Hip Hop culture with their music and tales about life in the hood.",
+            "genres": ["biography", "drama", "history"],
+            "rate": "8.0",
+            "length": "2hr 27mins",
+            "img": "straight-outta-compton.jpg"
           },
         ];
-        const action = new fromPizzas.LoadPizzasSuccess(payload);
+        const action = new fromMovies.LoadMoviesSuccess(payload);
 
         expect({ ...action }).toEqual({
-          type: fromPizzas.LOAD_PIZZAS_SUCCESS,
+          type: fromMovies.LOAD_MOVIES_SUCCESS,
           payload,
         });
       });
     });
   });
 
-  describe('CreatePizza Actions', () => {
-    describe('CreatePizza', () => {
-      it('should create an action', () => {
-        const payload = {
-          name: 'Pizza #2',
-          toppings: [
-            { id: 1, name: 'onion' },
-            { id: 2, name: 'mushroom' },
-            { id: 3, name: 'basil' },
-          ],
-        };
-        const action = new fromPizzas.CreatePizza(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.CREATE_PIZZA,
-          payload,
-        });
-      });
-    });
-
-    describe('CreatePizzaFail', () => {
-      it('should create an action', () => {
-        const payload = { message: 'Create Error' };
-        const action = new fromPizzas.CreatePizzaFail(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.CREATE_PIZZA_FAIL,
-          payload,
-        });
-      });
-    });
-
-    describe('CreatePizzaSuccess', () => {
-      it('should create an action', () => {
-        const payload = {
-          id: 2,
-          name: 'Pizza #2',
-          toppings: [
-            { id: 1, name: 'onion' },
-            { id: 2, name: 'mushroom' },
-            { id: 3, name: 'basil' },
-          ],
-        };
-        const action = new fromPizzas.CreatePizzaSuccess(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.CREATE_PIZZA_SUCCESS,
-          payload,
-        });
-      });
-    });
-  });
-
-  describe('UpdatePizza Actions', () => {
-    describe('UpdatePizza', () => {
-      it('should create an action', () => {
-        const payload = {
-          id: 2,
-          name: 'Pizza #2',
-          toppings: [
-            { id: 1, name: 'onion' },
-            { id: 2, name: 'mushroom' },
-            { id: 3, name: 'basil' },
-          ],
-        };
-        const action = new fromPizzas.UpdatePizza(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.UPDATE_PIZZA,
-          payload,
-        });
-      });
-    });
-
-    describe('UpdatePizzaFail', () => {
-      it('should create an action', () => {
-        const payload = { message: 'Update Error' };
-        const action = new fromPizzas.UpdatePizzaFail(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.UPDATE_PIZZA_FAIL,
-          payload,
-        });
-      });
-    });
-
-    describe('UpdatePizzaSuccess', () => {
-      it('should create an action', () => {
-        const payload = {
-          id: 2,
-          name: 'Pizza #2',
-          toppings: [
-            { id: 1, name: 'onion' },
-            { id: 2, name: 'mushroom' },
-            { id: 3, name: 'basil' },
-          ],
-        };
-        const action = new fromPizzas.UpdatePizzaSuccess(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.UPDATE_PIZZA_SUCCESS,
-          payload,
-        });
-      });
-    });
-  });
-
-  describe('RemovePizza Actions', () => {
-    describe('RemovePizza', () => {
-      it('should create an action', () => {
-        const payload = {
-          id: 2,
-          name: 'Pizza #2',
-          toppings: [
-            { id: 1, name: 'onion' },
-            { id: 2, name: 'mushroom' },
-            { id: 3, name: 'basil' },
-          ],
-        };
-        const action = new fromPizzas.RemovePizza(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.REMOVE_PIZZA,
-          payload,
-        });
-      });
-    });
-
-    describe('RemovePizzaFail', () => {
-      it('should create an action', () => {
-        const payload = { message: 'Remove Error' };
-        const action = new fromPizzas.RemovePizzaFail(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.REMOVE_PIZZA_FAIL,
-          payload,
-        });
-      });
-    });
-
-    describe('RemovePizzaSuccess', () => {
-      it('should create an action', () => {
-        const payload = {
-          id: 2,
-          name: 'Pizza #2',
-          toppings: [
-            { id: 1, name: 'onion' },
-            { id: 2, name: 'mushroom' },
-            { id: 3, name: 'basil' },
-          ],
-        };
-        const action = new fromPizzas.RemovePizzaSuccess(payload);
-
-        expect({ ...action }).toEqual({
-          type: fromPizzas.REMOVE_PIZZA_SUCCESS,
-          payload,
-        });
-      });
-    });
-  });
 });

@@ -2,7 +2,15 @@
   display: flex;
   flex-wrap: wrap;
 }
+.movie-card {
+  max-width: 160px;
+  margin: 10px;
+  transition: all .2s ease-in-out;
+}
+.mat-card-header {
+  height: 60px;
 
+}
 .movie-item {
   flex-grow: 1;
   flex-basis: 0;
@@ -31,3 +39,6 @@
   }
 }
 
+.movie-card:hover {
+  transform: scale(1.02);
+}

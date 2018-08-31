@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { tap, filter, take, switchMap, catchError } from 'rxjs/operators';
 
@@ -19,7 +19,7 @@ export class MoviesGuard implements CanActivate {
   }
 
   checkStore(): Observable<boolean> {
-    return this.store.select(fromStore.getPizzasLoaded).pipe(
+    return this.store.pipe(select(fromStore.getMoviesLoaded)).pipe(
       tap(loaded => {
         if (!loaded) {
           this.store.dispatch(new fromStore.LoadMovies());

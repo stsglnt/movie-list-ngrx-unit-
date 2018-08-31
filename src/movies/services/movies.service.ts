@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import 'rxjs/add/observable/throw';
 
@@ -14,7 +14,12 @@ export class MoviesService {
   getMovies(): Observable<IMovie[]> {
     return this.http
       .get<IMovie[]>(`http://localhost:3004/movies`)
-      .pipe(catchError((error: any) => Observable.throw(error.json())));
+      .pipe(catchError((error: any) => throwError(error.json())));
+  }
+  getGenreMovies(genreType): Observable<IMovie[]> {
+    return this.http
+      .get<IMovie[]>(`http://localhost:3004/movies?genres.${genreType}=true`)
+      .pipe(catchError((error: any) => throwError(error.json())));
   }
 
 }

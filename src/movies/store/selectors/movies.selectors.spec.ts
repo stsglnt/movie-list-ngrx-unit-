@@ -1,55 +1,56 @@
-import { StoreModule, Store, combineReducers } from '@ngrx/store';
+import {StoreModule, Store, combineReducers, select} from '@ngrx/store';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 import { TestBed } from '@angular/core/testing';
-import { Pizza } from '../../models/pizza.model';
+import { IMovie } from '../../models/movies.model';
 
 import * as fromRoot from '../../../app/store';
 import * as fromReducers from '../reducers/index';
 import * as fromActions from '../actions/index';
 import * as fromSelectors from './movies.selectors';
 
-describe('Pizzas Selectors', () => {
-  let store: Store<fromReducers.ProductsState>;
+describe('Movies Selectors', () => {
+  let store: Store<fromReducers.AppState>;
 
-  const pizza1: Pizza = {
-    id: 1,
-    name: "Fish 'n Chips",
-    toppings: [
-      { id: 1, name: 'fish' },
-      { id: 2, name: 'chips' },
-      { id: 3, name: 'cheese' },
-    ],
+  const movie1: IMovie = {
+    "id": 1,
+    "key": "deadpool",
+    "name": "Deadpool",
+    "description": "A former Special Forces operative turned mercenary is subjected to a rogue experiment that leaves him with accelerated healing powers, adopting the alter ego Deadpool.",
+    "genres": ["action", "adventure", "comedy"],
+    "rate": "8.6",
+    "length": "1hr 48mins",
+    "img": "deadpool.jpg"
   };
 
-  const pizza2: Pizza = {
-    id: 2,
-    name: 'Aloha',
-    toppings: [
-      { id: 1, name: 'ham' },
-      { id: 2, name: 'pineapple' },
-      { id: 3, name: 'cheese' },
-    ],
+  const movie2: IMovie = {
+    "id": 2,
+    "key": "we-are-the-millers",
+    "name": "We\"re the Millers",
+    "description": "A veteran pot dealer creates a fake family as part of his plan to move a huge shipment of weed into the U.S. from Mexico.",
+    "genres": ["adventure", "comedy", "crime"],
+    "rate": "7.0",
+    "length": "1hr 50mins",
+    "img": "we-are-the-millers.jpg"
   };
 
-  const pizza3: Pizza = {
-    id: 3,
-    name: 'Burrito',
-    toppings: [
-      { id: 1, name: 'beans' },
-      { id: 2, name: 'beef' },
-      { id: 3, name: 'rice' },
-      { id: 4, name: 'cheese' },
-      { id: 5, name: 'avocado' },
-    ],
+  const movie3: IMovie = {
+    "id": 3,
+    "key": "straight-outta-compton",
+    "name": "Straight Outta Compton",
+    "description": "The group NWA emerges from the mean streets of Compton in Los Angeles, California, in the mid-1980s and revolutionizes Hip Hop culture with their music and tales about life in the hood.",
+    "genres": ["biography", "drama", "history"],
+    "rate": "8.0",
+    "length": "2hr 27mins",
+    "img": "straight-outta-compton.jpg"
   };
 
-  const pizzas: Pizza[] = [pizza1, pizza2, pizza3];
+  const movies: IMovie[] = [movie1, movie2, movie3];
 
   const entities = {
-    1: pizzas[0],
-    2: pizzas[1],
-    3: pizzas[2],
+    1: movies[0],
+    2: movies[1],
+    3: movies[2],
   };
 
   beforeEach(() => {
@@ -57,7 +58,7 @@ describe('Pizzas Selectors', () => {
       imports: [
         StoreModule.forRoot({
           ...fromRoot.reducers,
-          products: combineReducers(fromReducers.reducers),
+          movies: combineReducers(fromReducers.reducers),
         }),
       ],
     });
@@ -65,12 +66,10 @@ describe('Pizzas Selectors', () => {
     store = TestBed.get(Store);
   });
 
-  describe('getPizzaState', () => {
-    it('should return state of pizza store slice', () => {
+  describe('getMovieState', () => {
+    it('should return state of movie store slice', () => {
       let result;
-
-      store
-        .select(fromSelectors.getPizzaState)
+      store.pipe(select(fromSelectors.getMovieState))
         .subscribe(value => (result = value));
 
       expect(result).toEqual({
@@ -79,7 +78,7 @@ describe('Pizzas Selectors', () => {
         loading: false,
       });
 
-      store.dispatch(new fromActions.LoadPizzasSuccess(pizzas));
+      store.dispatch(new fromActions.LoadMoviesSuccess(movies));
 
       expect(result).toEqual({
         entities,
@@ -89,143 +88,93 @@ describe('Pizzas Selectors', () => {
     });
   });
 
-  describe('getPizzaEntities', () => {
-    it('should return pizzas as entities', () => {
+  describe('getMovieEntities', () => {
+    it('should return movies as entities', () => {
       let result;
 
-      store
-        .select(fromSelectors.getPizzasEntities)
-        .subscribe(value => (result = value));
+      store.pipe(select(fromSelectors.getMoviesEntities))
+        .subscribe(value => result = value );
 
       expect(result).toEqual({});
 
-      store.dispatch(new fromActions.LoadPizzasSuccess(pizzas));
+      store.dispatch(new fromActions.LoadMoviesSuccess(movies));
 
       expect(result).toEqual(entities);
     });
   });
 
-  describe('getSelectedPizza', () => {
-    it('should return selected pizza as an entity', () => {
+  describe('getSelectedMovie', () => {
+    it('should return selected movie as an entity', () => {
       let result;
       let params;
 
-      store.dispatch(new fromActions.LoadPizzasSuccess(pizzas));
+      store.dispatch(new fromActions.LoadMoviesSuccess(movies));
 
       store.dispatch({
         type: 'ROUTER_NAVIGATION',
         payload: {
           routerState: {
-            url: '/products',
+            url: '/movies',
             queryParams: {},
-            params: { pizzaId: '2' },
+            params: { movieId: '2' },
           },
           event: {},
         },
       });
 
-      store
-        .select(fromRoot.getRouterState)
+      store.pipe(select(fromRoot.getRouterState))
         .subscribe(routerState => (params = routerState.state.params));
 
-      expect(params).toEqual({ pizzaId: '2' });
+      expect(params).toEqual({ movieId: '2' });
 
-      store
-        .select(fromSelectors.getSelectedPizza)
-        .subscribe(selectedPizza => (result = selectedPizza));
+      store.pipe(select(fromSelectors.getSelectedMovie))
+        .subscribe(selectedMovie => (result = selectedMovie));
 
       expect(result).toEqual(entities[2]);
     });
   });
 
-  describe('getPizzaVisualised', () => {
-    it('should return selected pizza composed with selected toppings', () => {
-      let result;
-      let params;
-      const toppings = [
-        {
-          id: 6,
-          name: 'mushroom',
-        },
-        {
-          id: 9,
-          name: 'pepper',
-        },
-        {
-          id: 11,
-          name: 'sweetcorn',
-        },
-      ];
 
-      store.dispatch(new fromActions.LoadPizzasSuccess(pizzas));
-      store.dispatch(new fromActions.LoadToppingsSuccess(toppings));
-      store.dispatch(new fromActions.VisualiseToppings([11, 9, 6]));
-
-      store.dispatch({
-        type: 'ROUTER_NAVIGATION',
-        payload: {
-          routerState: {
-            url: '/products',
-            queryParams: {},
-            params: { pizzaId: '2' },
-          },
-          event: {},
-        },
-      });
-
-      store
-        .select(fromSelectors.getPizzaVisualised)
-        .subscribe(selectedPizza => (result = selectedPizza));
-
-      const expectedToppings = [toppings[2], toppings[1], toppings[0]];
-
-      expect(result).toEqual({ ...entities[2], toppings: expectedToppings });
-    });
-  });
-
-  describe('getAllPizzas', () => {
-    it('should return pizzas as an array', () => {
+  describe('getAllMovies', () => {
+    it('should return movies as an array', () => {
       let result;
 
-      store
-        .select(fromSelectors.getAllPizzas)
+      store.pipe(select(fromSelectors.getAllMovies))
         .subscribe(value => (result = value));
 
       expect(result).toEqual([]);
 
-      store.dispatch(new fromActions.LoadPizzasSuccess(pizzas));
+      store.dispatch(new fromActions.LoadMoviesSuccess(movies));
 
-      expect(result).toEqual(pizzas);
+      expect(result).toEqual(movies);
     });
   });
 
-  describe('getPizzasLoaded', () => {
-    it('should return the pizzas loaded state', () => {
+  describe('getMoviesLoaded', () => {
+    it('should return the movies loaded state', () => {
       let result;
 
-      store
-        .select(fromSelectors.getPizzasLoaded)
+      store.pipe(select(fromSelectors.getMoviesLoaded))
         .subscribe(value => (result = value));
 
       expect(result).toEqual(false);
 
-      store.dispatch(new fromActions.LoadPizzasSuccess([]));
+      store.dispatch(new fromActions.LoadMoviesSuccess([]));
 
       expect(result).toEqual(true);
     });
   });
 
-  describe('getPizzasLoading', () => {
-    it('should return the pizzas loading state', () => {
+  describe('getMoviesLoading', () => {
+    it('should return the movies loading state', () => {
       let result;
 
-      store
-        .select(fromSelectors.getPizzasLoading)
+      store.pipe(select(fromSelectors.getMoviesLoading))
         .subscribe(value => (result = value));
 
       expect(result).toEqual(false);
 
-      store.dispatch(new fromActions.LoadPizzas());
+      store.dispatch(new fromActions.LoadMovies());
 
       expect(result).toEqual(true);
     });

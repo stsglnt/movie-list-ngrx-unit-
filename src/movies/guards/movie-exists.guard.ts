@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot } from '@angular/router';
 
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 import { tap, map, filter, take, switchMap } from 'rxjs/operators';
@@ -17,14 +17,13 @@ export class MovieExistsGuard implements CanActivate {
     return this.checkStore().pipe(
       switchMap(() => {
         const id = parseInt(route.params.movieId, 10);
-        return this.hasPizza(id);
+        return this.hasMovie(id);
       })
     );
   }
 
-  hasPizza(id: number): Observable<boolean> {
-    return this.store
-      .select(fromStore.getMoviesEntities)
+  hasMovie(id: number): Observable<boolean> {
+    return this.store.pipe(select(fromStore.getMoviesEntities))
       .pipe(
         map((entities: { [key: number]: IMovie }) => !!entities[id]),
         take(1)
@@ -32,10 +31,9 @@ export class MovieExistsGuard implements CanActivate {
   }
 
   checkStore(): Observable<boolean> {
-    return this.store.select(fromStore.getPizzasLoaded).pipe(
+    return this.store.pipe(select(fromStore.getMoviesLoaded)).pipe(
       tap(loaded => {
         if (!loaded) {
-          console.log('load selected');
           this.store.dispatch(new fromStore.LoadMovies());
         }
       }),

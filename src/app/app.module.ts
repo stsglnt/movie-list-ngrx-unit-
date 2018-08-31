@@ -23,6 +23,7 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
 
 // bootstrap
 import { AppComponent } from './containers/app/app.component';
+import {MaterialModule} from './material.module';
 
 // routes
 export const ROUTES: Routes = [
@@ -42,6 +43,7 @@ export const ROUTES: Routes = [
     EffectsModule.forRoot(effects),
     StoreRouterConnectingModule,
     environment.development ? StoreDevtoolsModule.instrument() : [],
+    MaterialModule
   ],
   providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
   declarations: [AppComponent],

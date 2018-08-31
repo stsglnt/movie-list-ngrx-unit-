@@ -20,7 +20,7 @@ export const getSelectedMovie = createSelector(
   getMoviesEntities,
   fromRoot.getRouterState,
   (entities, router): IMovie => {
-    return router.state && entities[router.state.params.pizzaId];
+    return router.state && entities[router.state.params.movieId];
   }
 );
 
@@ -28,11 +28,11 @@ export const getAllMovies = createSelector(getMoviesEntities, entities => {
   return Object.keys(entities).map(id => entities[parseInt(id, 10)]);
 });
 
-export const getPizzasLoaded = createSelector(
+export const getMoviesLoaded = createSelector(
   getMovieState,
   fromMovies.getMoviesLoaded
 );
-export const getPizzasLoading = createSelector(
+export const getMoviesLoading = createSelector(
   getMovieState,
   fromMovies.getMoviesLoading
 );

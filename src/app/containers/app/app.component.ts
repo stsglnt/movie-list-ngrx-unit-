@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {GenreType, genreType} from '../../../movies/models/movies';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +7,8 @@ import { Component } from '@angular/core';
   template: `
   <div class="app">
     <div class="app__header">
-      SEARCH BAR
+    
+      <img src="../../../assets/logo-2.png" alt="">
     </div>
     <div class="app__content">
       <div class="app__nav">
@@ -19,4 +21,7 @@ import { Component } from '@angular/core';
   </div>
   `,
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor() {
+  }
+}

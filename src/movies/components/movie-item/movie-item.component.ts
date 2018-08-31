@@ -13,14 +13,16 @@ import {IMovie} from '../../models/movies.model';
   styleUrls: ['movie-item.component.scss'],
   template: `
     <div  class="movies-container">
-      <div class="movie-item" *ngFor="let movie of movies">
+      <mat-card class="movie-card" *ngFor="let movie of movies">
         <a [routerLink]="['/movies', movie.id]">
-          <h4>{{ movie.name}}</h4>
-          <!--<button type="button" class="btn btn__ok">-->
-            <!--View more-->
-          <!--</button>-->
+        <mat-card-header class="card-header">
+          <mat-card-title>{{movie.name}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="../../../assets/movie-covers/{{movie.img}}" alt="Photo of a Shiba Inu">
+        <mat-card-content>
+        </mat-card-content>
         </a>
-      </div>
+      </mat-card>
     </div>
   `,
 })

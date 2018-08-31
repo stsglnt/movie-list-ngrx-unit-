@@ -7,6 +7,8 @@
     position: relative;
     text-align: center;
     padding: 35px 0;
+    margin: 0 auto;
+    max-width: 1000px;
   }
   &__logo {
     width: 75px;
@@ -48,4 +50,13 @@
       font-weight: 600;
     }
   }
+}
+.search-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.search-full-width {
+  width: 100%;
 }
