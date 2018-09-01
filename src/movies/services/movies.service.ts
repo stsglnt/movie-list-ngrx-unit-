@@ -16,7 +16,9 @@ export class MoviesService {
       .get<IMovie[]>(`http://localhost:3004/movies`)
       .pipe(catchError((error: any) => throwError(error.json())));
   }
-  getGenreMovies(genreType): Observable<IMovie[]> {
+  getGenreMovies(genreType?): Observable<IMovie[]> {
+    console.log('genretype from service', genreType);
+    const url = genreType ? `http://localhost:3004/movies?genres.${genreType}=true` : `http://localhost:3004/movies`
     return this.http
       .get<IMovie[]>(`http://localhost:3004/movies?genres.${genreType}=true`)
       .pipe(catchError((error: any) => throwError(error.json())));

@@ -42,7 +42,7 @@ export class LoadMoviesGenreSuccess implements Action {
 // search action
 export class SearchMovies implements Action {
   readonly type = SEARCH_MOVIES;
-  constructor(public payload: string) {}
+  constructor(public payload: {query: string, currentGenre: string}) {}
 }
 export class SearchMoviesSuccess implements Action {
   readonly type = SEARCH_MOVIES_SUCCESS;

@@ -48,6 +48,7 @@ import {select, Store} from '@ngrx/store';
 export class MoviesComponent implements OnInit {
   movies$: Observable<IMovie[]>;
   genres: any;
+  currentGenre: string;
   searchInputChange$ = new Subject<string>();
 
   constructor(private store: Store<fromStore.AppState>) {
@@ -56,9 +57,10 @@ export class MoviesComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((text: string) => of(text))
      )
-  .subscribe((text: string) => {
-    if (text.length !== 0 ) {
-        this.store.dispatch(new fromStore.SearchMovies(text));
+  .subscribe((query: string) => {
+    // dispatch with selected genre and then run LoadGenre insted of LoadMovies
+    if (query.length !== 0 ) {
+        this.store.dispatch(new fromStore.SearchMovies({query, currentGenre: this.currentGenre}));
       } else {
         this.store.dispatch(new fromStore.LoadMovies());
       }
@@ -70,6 +72,7 @@ export class MoviesComponent implements OnInit {
     this.movies$ = this.store.pipe(select(fromStore.getAllMovies));
   }
   onSelectionChange(event) {
+    this.currentGenre = event.value;
     if (event.value !== 'any') {
       this.store.dispatch(new fromStore.LoadMoviesGenre(event.value));
     } else {

@@ -21,6 +21,8 @@ import * as fromGuards from './guards';
 // services
 import * as fromServices from './services';
 import {MaterialModule} from '../app/material.module';
+import {StarRatingConfigService, StarRatingModule} from 'angular-star-rating';
+import {CustomConfigService} from './services/star.service';
 
 // routes
 export const ROUTES: Routes = [
@@ -45,9 +47,14 @@ export const ROUTES: Routes = [
     StoreModule.forFeature('movies', reducers),
     EffectsModule.forFeature(effects),
     MaterialModule,
-    FormsModule
+    FormsModule,
+    StarRatingModule.forRoot()
+
   ],
-  providers: [...fromServices.services, ...fromGuards.guards],
+  providers: [...fromServices.services, ...fromGuards.guards,
+    {
+      provide: StarRatingConfigService, useClass: CustomConfigService
+    }],
   declarations: [...fromContainers.containers, ...fromComponents.components],
   exports: [...fromContainers.containers, ...fromComponents.components],
 })

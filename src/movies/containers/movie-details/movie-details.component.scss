@@ -11,3 +11,20 @@
 .arrow_back_button{
   cursor: pointer;
 }
+.movie-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-left {
+}
+.flex-right {
+  flex: 1;
+}
+.info-list {
+  list-style: none;
+  margin-left: -20px;
+}
+.movie-title {
+  display: flex;
+  flex-wrap: wrap;
+}

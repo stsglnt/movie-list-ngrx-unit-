@@ -29,11 +29,11 @@ export class MoviesEffects {
   @Effect()
   loadSearchMovies$ = this.actions$.pipe(ofType(movieActions.SEARCH_MOVIES)).pipe(
     map((action: movieActions.SearchMovies) => action.payload),
-    switchMap((query) => {
+    switchMap((searchValue) => {
       return this.movieService
-        .getMovies()
+        .getGenreMovies(searchValue.currentGenre)
         .pipe(
-          map(movies => new movieActions.SearchMoviesSuccess({movies, query})),
+          map(movies => new movieActions.SearchMoviesSuccess({movies, query: searchValue.query})),
           catchError(error => of(new movieActions.SearchMoviesFail(error)))
         );
     })

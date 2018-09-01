@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {GenreType, genreType} from '../../../movies/models/movies';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -24,4 +24,5 @@ import {GenreType, genreType} from '../../../movies/models/movies';
 export class AppComponent {
   constructor() {
   }
+
 }
