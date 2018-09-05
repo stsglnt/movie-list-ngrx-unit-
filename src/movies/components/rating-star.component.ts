@@ -2,12 +2,7 @@ import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 
 @Component({
   selector: 'rating-star',
-  template: `<div>
-    <span class="icon" *ngFor = "let s of maxItem">
-    <i [ngClass]=" s <= this.ratedCount ? \'filled\' :\'\'\ " class="fa fa-star"
-        aria-hidden="true" (click)="toggleRating(s)"></i>
-    </span>
-    </div>`,
+  templateUrl: './rating-star.component.html',
   styleUrls: ['./rating-star.component.scss']
 })
 export class RatingStarComponent implements OnInit{
@@ -21,7 +16,7 @@ export class RatingStarComponent implements OnInit{
     this.ratedCount = 0;
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.maxItem = [];
     for (let i = 0; i < this.max; i++) {
       this.maxItem.push(i + 1);

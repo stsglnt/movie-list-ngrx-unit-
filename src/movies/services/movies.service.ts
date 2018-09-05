@@ -4,23 +4,24 @@ import { HttpClient } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import 'rxjs/add/observable/throw';
-
+import {environment} from '../../environments/environment';
 import { IMovie } from '../models/movies.model';
+export const baseUrl = environment.baseUrl;
 
 @Injectable()
 export class MoviesService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getMovies(): Observable<IMovie[]> {
     return this.http
-      .get<IMovie[]>(`http://localhost:3004/movies`)
+      .get<IMovie[]>(`${baseUrl}/movies`)
       .pipe(catchError((error: any) => throwError(error.json())));
   }
   getGenreMovies(genreType?): Observable<IMovie[]> {
-    console.log('genretype from service', genreType);
-    const url = genreType ? `http://localhost:3004/movies?genres.${genreType}=true` : `http://localhost:3004/movies`
+    const url = genreType ? `${baseUrl}/movies?genres.${genreType}=true` : `${baseUrl}/movies`;
     return this.http
-      .get<IMovie[]>(`http://localhost:3004/movies?genres.${genreType}=true`)
+      .get<IMovie[]>(`${baseUrl}/movies?genres.${genreType}=true`)
       .pipe(catchError((error: any) => throwError(error.json())));
   }
 
