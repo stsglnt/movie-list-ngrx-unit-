@@ -23,6 +23,7 @@ export class MoviesComponent implements OnInit {
   constructor(private store: Store<fromStore.AppState>) {
     this.searchInputChange$.pipe(
       debounceTime(500),
+      distinctUntilChanged(),
       switchMap((text: string) => of(text))
      )
   .subscribe((query: string) => {
